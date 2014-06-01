@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Gradle: mule-core-3.5.0-tests">
-    <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/org/mule/mule-core/3.5.0/mule-core-3.5.0-tests.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

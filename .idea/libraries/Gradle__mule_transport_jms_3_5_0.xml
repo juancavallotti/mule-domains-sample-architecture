@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Gradle: mule-transport-jms-3.5.0">
-    <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/org/mule/transports/mule-transport-jms/3.5.0/mule-transport-jms-3.5.0.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
