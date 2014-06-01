@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- created by the gradle mule plugin -->
+
+<mule-domain xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/domain" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:mule="http://www.mulesoft.org/schema/mule/core"
+             xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+                                 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+                                 http://www.mulesoft.org/schema/mule/domain http://www.mulesoft.org/schema/mule/domain/current/mule-domain.xsd
+                                 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+                                 http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+                                 http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd">
+
+    <http:connector name="sharedHttpConnector">
+        <mule:service-overrides sessionHandler="org.mule.session.NullSessionHandler" />
+    </http:connector>
+
+    <!-- used to handle communication between the apps -->
+    <jms:activemq-connector name="sharedActiveMQ"
+            brokerURL="vm://localhost?marshal=false&amp;broker.persistent=false"/>
+
+</mule-domain>

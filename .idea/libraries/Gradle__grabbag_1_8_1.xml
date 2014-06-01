@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: grabbag-1.8.1">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/stephenc/eaio-grabbag/grabbag/1.8.1/grabbag-1.8.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

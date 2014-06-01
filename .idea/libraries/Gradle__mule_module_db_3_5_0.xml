@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: mule-module-db-3.5.0">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/mule/modules/mule-module-db/3.5.0/mule-module-db-3.5.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,33 @@
+#%RAML 0.8
+title: Sample architecture with domains.
+baseUri: http://localhost:8081/api
+
+/cookbook:
+  get:
+    description: List all the recipes in the cookbook
+    responses:
+      200:
+        description: Full list of the recipes in this cookbook.
+        body:
+          application/json:
+            example: '{"recipes":[{"name":"Hot Dog","ingredients":[{"name":"Vienna Sausage"},{"name":"Hot dog bread"},{"name":"Mustard"}]}]}'
+  post:
+    description: Insert a new recipe
+    body:
+      application/json:
+        example: '{"name":"Hot Dog","ingredients":[{"name":"Vienna Sausage"},{"name":"Hot dog bread"},{"name":"Mustard"}]}'
+    responses:
+      200:
+        description: The JOB ID for this request to insert.
+        body:
+          application/json:
+            example: '{"jobid":"ffceda22423424121123"}'
+/jobs/{jobId}:
+  get:
+    description: Check the status of a given job.
+    responses:
+      200:
+        description: The status of the JOB ID
+        body:
+          application/json:
+            example: '{"jobid":"ffceda22423424121123","status":"complete","updated":"2014-05-31 16:30:12"}'

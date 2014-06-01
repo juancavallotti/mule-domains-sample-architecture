@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: tomcat-util-5.5.23">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/tomcat/tomcat-util/5.5.23/tomcat-util-5.5.23.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

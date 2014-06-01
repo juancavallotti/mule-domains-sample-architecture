@@ -1,0 +1,15 @@
+assemble
+clean
+init
+wrapper
+dependencies
+dependencyInsight
+help
+projects
+properties
+tasks
+checkDomain
+fixDomain
+initDomain
+install
+muleDeps

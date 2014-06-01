@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: mx4j-tools-2.1.1">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/mx4j/mx4j-tools/2.1.1/mx4j-tools-2.1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

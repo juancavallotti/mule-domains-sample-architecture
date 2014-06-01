@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: cxf-common-utilities-2.5.9">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-common-utilities/2.5.9/cxf-common-utilities-2.5.9.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-common-utilities/2.5.9/cxf-common-utilities-2.5.9-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

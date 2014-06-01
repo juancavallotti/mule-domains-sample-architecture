@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- created by the gradle mule plugin -->
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans"
+      xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+      xmlns:json="http://www.mulesoft.org/schema/mule/json"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+      xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+                          http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+                          http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+                          http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+                          http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+                          http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+                          ">
+
+    <spring:bean id="dataSource" class="org.enhydra.jdbc.standard.StandardDataSource">
+        <spring:property name="driverName" value="org.apache.derby.jdbc.EmbeddedDriver" />
+        <spring:property name="url" value="jdbc:derby:memory:sampleApp;create=true" />
+    </spring:bean>
+
+
+    <spring:bean class="org.mule.demo.InitDatabase" init-method="createTables">
+        <spring:property name="dataSource" ref="dataSource" />
+    </spring:bean>
+
+    <!-- configuration of the database module -->
+    <db:generic-config name="dbConfiguration" dataSource-ref="dataSource" />
+
+    <!-- hello world flow, to be removed -->
+    <flow name="mule-configFlow1" doc:name="mule-configFlow1">
+        <jms:inbound-endpoint queue="testQueue" />
+        <set-payload doc:name="Set Payload" value="Hello World! from app 2"/>
+    </flow>
+
+
+    <!-- find the job information -->
+    <flow name="findJobInfo">
+        <jms:inbound-endpoint queue="jobInfo" />
+        <set-variable variableName="jobId" value="#[payload]" />
+
+        <logger level="INFO" message="Looking for job with id: #[jobId]" />
+        <!-- find in the database for a particular job -->
+        <db:select>
+            <db:parameterized-query><![CDATA[select * from jobs where jobId=#[payload]]]></db:parameterized-query>
+        </db:select>
+
+        <!-- return it as it is -->
+        <logger level="INFO" message="Found job info: #[payload]" />
+
+        <object-to-byte-array-transformer />
+    </flow>
+
+    <!-- list all the recipes -->
+    <flow name="listRecipes">
+        <jms:inbound-endpoint queue="listCookbook" />
+
+        <db:select>
+            <db:parameterized-query><![CDATA[select * from recipes]]></db:parameterized-query>
+        </db:select>
+
+        <logger level="INFO" message="Query result: #[payload]" />
+
+        <choice>
+            <when expression="#[payload.isEmpty()]">
+                <logger level="INFO" message="No results to retunr" />
+            </when>
+            <otherwise>
+                <!-- enrich each recipe with its ingredients -->
+                <collection-splitter />
+
+                <db:select target="#[payload['ingredients']]">
+                    <db:parameterized-query><![CDATA[select name from recipeIngredients where recipeId = #[payload.recipeId]]]></db:parameterized-query>
+                </db:select>
+
+                <!-- collect all of them and return them -->
+                <collection-aggregator />
+
+                <!-- workaround automatic reply wants to send a stream or byte array -->
+                <object-to-byte-array-transformer />
+            </otherwise>
+        </choice>
+    </flow>
+
+    <flow name="insertRecipe">
+        <jms:inbound-endpoint queue="newRecipes" />
+
+        <!-- save the variable for future use -->
+        <set-variable variableName="jobId" value="#[message.inboundProperties['jobId']]" />
+
+        <!-- save the job status -->
+        <flow-ref name="createJobStatus" />
+
+        <!-- insert the recipe -->
+        <logger level="INFO" message="Received payload is: #[payload]" />
+
+        <db:insert target="#[flowVars['insertRecipeResult']]">
+            <db:parameterized-query><![CDATA[insert into recipes (recipeId, name) values (#[jobId], #[payload.name])]]></db:parameterized-query>
+        </db:insert>
+        <logger level="INFO" message="Inserted recipe with name: #[payload['name']]" />
+
+        <foreach collection="#[payload['ingredients']]">
+            <set-variable variableName="recordId" value="#[org.mule.util.UUID.getUUID()]" />
+            <logger level="INFO" message="Attempting to insert record with ID: #[recordId]" />
+            <db:insert target="#[flowVars['insertItemResult']]">
+                <db:parameterized-query><![CDATA[insert into recipeIngredients (itemId, name, recipeId) values(#[recordId], #[payload.name], #[jobId])]]></db:parameterized-query>
+            </db:insert>
+            <logger level="INFO" message="Inserted ingredient with name: #[payload['name']]" />
+        </foreach>
+
+        <flow-ref name="updateJobStatus" />
+
+    </flow>
+
+    <sub-flow name="createJobStatus">
+        <db:insert target="#[flowVars['jobStatusResult']]">
+            <db:parameterized-query><![CDATA[insert into jobs (jobId, status, updated) VALUES (#[jobId], 'IN_PROGRESS', CURRENT_TIMESTAMP)]]></db:parameterized-query>
+        </db:insert>
+    </sub-flow>
+
+    <sub-flow name="updateJobStatus">
+        <db:update target="#[flowVars['jobStatusResult']]">
+            <db:parameterized-query><![CDATA[update jobs set status = 'COMPLETE', updated = CURRENT_TIMESTAMP where jobId = #[jobId]]]></db:parameterized-query>
+        </db:update>
+    </sub-flow>
+</mule>

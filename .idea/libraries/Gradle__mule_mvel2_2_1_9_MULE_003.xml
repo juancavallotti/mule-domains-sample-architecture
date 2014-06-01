@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: mule-mvel2-2.1.9-MULE-003">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/mule/mvel/mule-mvel2/2.1.9-MULE-003/mule-mvel2-2.1.9-MULE-003.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
