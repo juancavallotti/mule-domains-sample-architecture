@@ -1,11 +1,14 @@
 buildscript {
-	dependencies {
-		classpath group: 'org.mulesoft.build', name: 'mule-gradle-plugin', version: '1.0.0-SNAPSHOT'
-	}
+	
+    dependencies {
+        classpath group: 'org.mulesoft.build', name: 'mule-gradle-plugin', version: '1.1.0'
+    }
 
-	repositories {
-		mavenLocal()
-	}
+    repositories {
+        maven {
+            url 'http://repository.mulesoft.org/releases'
+        }
+    }
 }
 
 apply plugin: 'mule-domain'
