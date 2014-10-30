@@ -10,7 +10,6 @@ This project consists in two modules:
 
 How to run:
 
-  1. Clone and build the [gradle plugin](https://github.com/mulesoft-labs/mule-gradle-plugin) as shown on its readme.
   1. Download mule community eddition from [MuleSoft](http://www.mulesoft.org), unzip it and start it with `$ bin/mule`
   1. Edit the file `build.gradle` and change the install path to where you have installed Mule CE, please don't specify subfolders.
   1. Run the task `$ gradle install`, this will trigger the build and installation of the domain in mule.
